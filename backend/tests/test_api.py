@@ -1,3 +1,6 @@
+import pytest
+
+
 def _reg_model(client, name="VisionGen-X", version="2.1.0"):
     r = client.post("/api/models", json={"name": name, "version": version, "creator_name": "Team Alpha"})
     assert r.status_code == 201, r.text
@@ -8,10 +11,18 @@ def _reg_artifact(client, data, **form):
     return client.post("/api/artifacts", files={"file": ("img.png", data, "image/png")}, data=form)
 
 
-def test_health_and_status(client):
+@pytest.fixture
+def offline_chain(monkeypatch):
+    """Pin these tests to offline mode regardless of ambient env variables."""
+    import config
+    monkeypatch.setattr(config, "BLOCKCHAIN_RPC_URL", "")
+    monkeypatch.setattr(config, "CONTRACT_ADDRESS", "")
+
+
+def test_health_and_status(client, offline_chain):
     assert client.get("/health").json()["status"] == "ok"
     s = client.get("/api/status").json()
-    assert s["service"] == "ModelLedger" and s["implemented_phase"] == 4
+    assert s["service"] == "ModelLedger" and s["implemented_phase"] == 7
     assert s["blockchain"]["connected"] is False and s["blockchain"]["mode"] in {"offline", "dependency-missing", "rpc-unreachable", "error"}
     assert s["storage"]["mode"] == "sqlite" and s["storage"]["persistent"] is True
 
@@ -36,7 +47,7 @@ def test_upload_validation(client):
     assert r.status_code == 400
 
 
-def test_full_two_model_flow_and_verification(client, png):
+def test_full_two_model_flow_and_verification(client, offline_chain, png):
     a, b = _reg_model(client, "ModelA", "1.0"), _reg_model(client, "ModelB", "2.0")
     r1 = _reg_artifact(client, png((10, 10, 10)), model_id=a["model_id"])
     assert r1.status_code == 201 and r1.json()["event"]["action"] == "GENERATED"
@@ -77,15 +88,14 @@ def test_bad_references_are_rejected_without_side_effects(client, png):
     assert r.status_code == 422
 
 
-def test_adversarial_catalogue_only(client):
+def test_adversarial_scenarios_are_executable(client):
     scenarios = client.get("/api/adversarial/scenarios").json()
-    assert len(scenarios) == 5 and not any(s["implemented"] for s in scenarios)
-    assert client.post("/api/adversarial/run/tamper-artifact").status_code == 501
+    assert len(scenarios) == 5 and all(s["implemented"] for s in scenarios)
     assert client.post("/api/adversarial/run/nope").status_code == 404
 
 
-def test_phase4_status_reports_real_implemented_features(client):
+def test_phase7_status_reports_real_implemented_features(client):
     s = client.get("/api/status").json()
-    assert s["implemented_phase"] == 4
+    assert s["implemented_phase"] == 7
     assert s["signatures"]["implemented"] is True
     assert s["robust_fingerprint"]["implemented"] is True

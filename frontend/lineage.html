@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Lineage</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Lineage <span class="mono" id="lineageId"></span></h1>
+    <p>From the generating model to this artifact: every step, signed and committed, with evidence flags.</p>
+  </section>
+
+  <section class="card">
+    <p class="msg" id="lineageMsg"></p>
+    <div id="lineageBody"></div>
+  </section>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/graph-ui.js"></script>
+<script src="/static/lineage.js"></script>
+</body>
+</html>

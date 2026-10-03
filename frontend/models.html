@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Models</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Model registry</h1>
+    <p>Register the AI models that produce artifacts. Each model gets a fingerprint, a creator identity and an optional on-chain commitment.</p>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>Register a model</h2>
+      <form id="modelForm">
+        <label>Name <input name="name" required maxlength="80" placeholder="VisionGen-X" /></label>
+        <label>Version <input name="version" required maxlength="32" placeholder="2.1.0" /></label>
+        <label>Creator <input name="creator_name" required maxlength="80" placeholder="Team Alpha" /></label>
+        <label>Type <input name="model_type" value="image-generator" maxlength="40" /></label>
+        <label>Weights SHA-256 <small>(optional, computed on your machine)</small>
+          <input name="model_hash" pattern="[0-9a-fA-F]{64}" placeholder="64 hex characters" /></label>
+        <button class="primary-btn" type="submit">Register model</button>
+        <p class="msg" id="modelMsg"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Registered models <span class="count" id="modelCount"></span></h2>
+      <div class="scroll"><table id="modelTable"></table></div>
+    </section>
+  </div>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/models.js"></script>
+</body>
+</html>

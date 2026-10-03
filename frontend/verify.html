@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Verify</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Verify an artifact</h1>
+    <p>Upload an image. ModelLedger hashes it, looks up provenance claims, validates signatures, reconstructs lineage and checks blockchain commitments — then reports a trust state with the evidence behind it.</p>
+  </section>
+
+  <section class="card">
+    <form id="verifyForm">
+      <label>Image file <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
+      <button class="primary-btn" type="submit">Verify</button>
+      <p class="msg" id="verifyMsg"></p>
+    </form>
+    <p class="hint">Files are hashed in memory. They are not stored.</p>
+  </section>
+
+  <section class="card" id="resultCard" hidden>
+    <h2>Verification result</h2>
+    <div id="resultBody"></div>
+  </section>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/graph-ui.js"></script>
+<script src="/static/verify.js"></script>
+</body>
+</html>

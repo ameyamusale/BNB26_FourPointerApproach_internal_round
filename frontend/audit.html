@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Audit</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Audit log</h1>
+    <p>Every provenance event in the system with its evidence flags: signature, on-chain commitment and the private-metadata commitment (hash only — the metadata itself is never stored).</p>
+  </section>
+
+  <section class="card">
+    <h2>Provenance events <span class="count" id="eventCount"></span></h2>
+    <div class="scroll"><table id="eventTable"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>Blockchain state</h2>
+    <div id="chainState" class="hint">checking…</div>
+  </section>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/audit.js"></script>
+</body>
+</html>

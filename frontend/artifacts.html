@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Artifacts</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Artifact registry</h1>
+    <p>Register AI-generated images and their transformations. Files are fingerprinted in memory — only hashes and metadata are kept.</p>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>Register artifact / transformation</h2>
+      <form id="artifactForm">
+        <label>Image file <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
+        <label>Producing model <select name="model_id" id="modelSelect"><option value="">— none —</option></select></label>
+        <label>Parent artifact <small>(leave empty for a freshly generated image)</small>
+          <select name="parent_artifact_id" id="parentSelect"><option value="">— none (GENERATED) —</option></select></label>
+        <label>Action <small>(required with a parent)</small>
+          <select name="action" id="actionSelect">
+            <option value="">—</option><option>UPSCALED</option><option>EDITED</option><option>RESIZED</option>
+            <option>CROPPED</option><option>FILTERED</option><option>RE_ENCODED</option><option>PUBLISHED</option>
+          </select></label>
+        <label>Application ID <small>(optional, when an app — not a model — did the step)</small>
+          <input name="application_id" maxlength="80" placeholder="EditorApp-v1" /></label>
+        <button class="primary-btn" type="submit">Register artifact</button>
+        <p class="msg" id="artifactMsg"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Registered artifacts <span class="count" id="artifactCount"></span></h2>
+      <div class="scroll"><table id="artifactTable"></table></div>
+    </section>
+  </div>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/artifacts.js"></script>
+</body>
+</html>

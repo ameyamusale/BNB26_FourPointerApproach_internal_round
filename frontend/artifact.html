@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Artifact Passport</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body data-kind="artifact">
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="card" id="passportCard">
+    <h2>Artifact passport <span class="count mono" id="passportId"></span></h2>
+    <p class="msg" id="passportMsg"></p>
+    <div id="passportBody"></div>
+  </section>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/graph-ui.js"></script>
+<script src="/static/passport.js"></script>
+</body>
+</html>

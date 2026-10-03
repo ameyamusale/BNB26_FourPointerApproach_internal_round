@@ -12,7 +12,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 import config
-from api import adversarial, artifacts, models as models_api, provenance, verification
+from api import adversarial, artifacts, demo, graph, models as models_api, provenance, verification
 from services import blockchain, fingerprint, signature
 from services.store import store
 
@@ -33,13 +33,56 @@ app.include_router(artifacts.router)
 app.include_router(provenance.router)
 app.include_router(verification.router)
 app.include_router(adversarial.router)
+app.include_router(graph.router)
+app.include_router(demo.router)
 
 app.mount("/static", StaticFiles(directory=str(config.FRONTEND_DIR)), name="static")
 
 
+# ---------------------------------------------------------------------------
+# UI pages (Phase 5+). Plain static HTML pages served by the same FastAPI app.
+# ---------------------------------------------------------------------------
+PAGES = {
+    "/dashboard": "dashboard.html",
+    "/models": "models.html",
+    "/artifacts": "artifacts.html",
+    "/verify": "verify.html",
+    "/audit": "audit.html",
+    "/adversarial": "adversarial.html",
+    "/demo": "demo.html",
+}
+
+
 @app.get("/", include_in_schema=False)
 def home() -> FileResponse:
-    return FileResponse(config.FRONTEND_DIR / "index.html")
+    return FileResponse(config.FRONTEND_DIR / "dashboard.html")
+
+
+def _page_factory(filename: str):
+    def page() -> FileResponse:
+        return FileResponse(config.FRONTEND_DIR / filename)
+    return page
+
+
+for _path, _filename in PAGES.items():
+    app.get(_path, include_in_schema=False)(_page_factory(_filename))
+    # Passport / lineage pages carry an :id path parameter.
+    app.get(_path + "/{resource_id}", include_in_schema=False)(_page_factory(_filename))
+
+
+@app.get("/models/{model_id}", include_in_schema=False)
+def model_page(model_id: str) -> FileResponse:
+    return FileResponse(config.FRONTEND_DIR / "model.html")
+
+
+@app.get("/artifacts/{artifact_id}", include_in_schema=False)
+def artifact_page(artifact_id: str) -> FileResponse:
+    return FileResponse(config.FRONTEND_DIR / "artifact.html")
+
+
+@app.get("/lineage/{artifact_id}", include_in_schema=False)
+def lineage_page(artifact_id: str) -> FileResponse:
+    return FileResponse(config.FRONTEND_DIR / "lineage.html")
 
 
 @app.get("/health", tags=["system"])

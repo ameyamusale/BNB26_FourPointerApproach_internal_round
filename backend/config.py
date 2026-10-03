@@ -10,7 +10,7 @@ from pathlib import Path
 APP_NAME = "ModelLedger"
 APP_TAGLINE = "AI Content Provenance & Verification Network"
 APP_VERSION = "0.1.0"
-IMPLEMENTED_PHASE = 4  # Phase 0 + Phase 1 + Phase 2 + Phase 3 + Phase 4
+IMPLEMENTED_PHASE = 7  # Phases 0-4 + Phase 5 (graph/passports/UI) + Phase 6 (demo pipeline) + Phase 7 (trust/conflicts/adversarial lab)
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"

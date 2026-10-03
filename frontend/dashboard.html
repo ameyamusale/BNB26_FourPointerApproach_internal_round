@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>AI content provenance, with evidence.</h1>
+    <p>ModelLedger records which AI model produced an artifact, every transformation it went through, and the cryptographic + blockchain evidence behind each claim — without exposing private prompts or files.</p>
+  </section>
+
+  <section class="stats" id="statGrid">
+    <div class="stat"><div class="num" id="statModels">—</div><div class="lbl">Models</div></div>
+    <div class="stat"><div class="num" id="statArtifacts">—</div><div class="lbl">Artifacts</div></div>
+    <div class="stat"><div class="num" id="statEvents">—</div><div class="lbl">Provenance events</div></div>
+    <div class="stat"><div class="num" id="statSigned">—</div><div class="lbl">Signed events</div></div>
+    <div class="stat"><div class="num" id="statOnchain">—</div><div class="lbl">On-chain records</div></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>Recent models <a class="link" href="/models">view all →</a></h2>
+      <div class="scroll"><table id="modelTable"></table></div>
+    </section>
+    <section class="card">
+      <h2>Recent artifacts <a class="link" href="/artifacts">view all →</a></h2>
+      <div class="scroll"><table id="artifactTable"></table></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>Full provenance graph <span class="count" id="graphCount"></span></h2>
+    <p class="hint">Every registered model, artifact and application with its provenance edges. Click any node to open its passport.</p>
+    <div id="fullGraph"></div>
+  </section>
+
+  <footer>Evidence states are never overstated: when blockchain or signing keys are not configured, checks show as <b>not checked</b> instead of passing.</footer>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/graph-ui.js"></script>
+<script src="/static/dashboard.js"></script>
+</body>
+</html>

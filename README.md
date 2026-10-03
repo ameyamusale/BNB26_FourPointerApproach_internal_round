@@ -2,7 +2,7 @@
 
 Hackathon problem: **Blockchain PS3 — prove which AI model produced this.**
 
-Status: **Phase 0 + Phase 1 + Phase 2 + Phase 3 + Phase 4 complete** (see `docs/PROGRESS.md`).
+Status: **Phases 0–7 complete** (see `docs/PROGRESS.md`).
 
 ModelLedger records and verifies the origin and transformation history of AI-generated artifacts across multiple models/applications, using hashes, provenance evidence and a blockchain registry, without exposing private prompts or files. It never reduces the answer to "real/fake": results are `TRUSTED`, `SELF_ASSERTED`, `UNVERIFIABLE` or `CONFLICT`, each with evidence.
 
@@ -54,11 +54,23 @@ cd blockchain && npm install && npm test
 
 ## Try the current flow in the UI
 
-1. Register model **ModelA v1.0** and **ModelB v2.0**.
-2. Register an image with ModelA and no parent → recorded as `GENERATED`.
-3. Register a second image with ModelB, parent = the first artifact, action = `UPSCALED`.
-4. Verify the second image → lineage is reconstructed from the database and the current evidence produces `SELF_ASSERTED` because signatures and blockchain persistence are later-phase work.
-5. Restart the backend and verify that the registered models, artifacts and provenance events are still present.
+Multi-page UI served by the same FastAPI app (Phase 5+):
+
+```text
+/dashboard        stats + whole-registry provenance graph
+/models           register models                  /models/{id}      model passport
+/artifacts        register artifacts/transforms    /artifacts/{id}   artifact passport
+/verify           upload + evidence checklist      /lineage/{id}     lineage graph
+/audit            all events + evidence flags      /adversarial      run live attacks
+/demo             one-click multi-model pipeline
+```
+
+Quick tour:
+
+1. Open **/demo**, drop any image, run the pipeline — Model A generates Artifact A, Model B upscales it, an editor app re-encodes Artifact C, with signed events (and on-chain commitments when configured).
+2. Open **/verify** and upload the final artifact again — you get the evidence checklist and a trust state (`TRUSTED` with chain + signing configured, otherwise honest `not checked` states).
+3. Open **/adversarial** and run an attack — the resulting trust state flips with a full evidence panel.
+4. Click any node in the dashboard graph to open its passport.
 
 ## Phase 3 + 4 blockchain and cryptographic setup
 

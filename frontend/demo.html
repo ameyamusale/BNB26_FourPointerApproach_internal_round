@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Demo Pipeline</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Multi-model transformation pipeline</h1>
+    <p>One click runs the full scenario from the problem statement: Model A generates Artifact A, Model B upscales it into Artifact B, and an editor application re-encodes it into Artifact C. Every step creates a signed provenance event (and a blockchain commitment when configured).</p>
+  </section>
+
+  <section class="card">
+    <form id="pipelineForm">
+      <label>Seed image <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
+      <label>Demo seed label <small>(optional — reusing a label reuses the demo models)</small>
+        <input name="seed" maxlength="12" placeholder="e.g. TEAM-ALPHA" /></label>
+      <button class="primary-btn" type="submit">Run pipeline</button>
+      <p class="msg" id="pipelineMsg"></p>
+    </form>
+    <p class="hint">The seed image is processed in memory and is not stored.</p>
+  </section>
+
+  <section class="card" id="resultCard" hidden>
+    <h2>Pipeline result</h2>
+    <div id="resultBody"></div>
+  </section>
+</div>
+<script src="/static/common.js"></script>
+<script src="/static/graph-ui.js"></script>
+<script src="/static/demo.js"></script>
+</body>
+</html>
