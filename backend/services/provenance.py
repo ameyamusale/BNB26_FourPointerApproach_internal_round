@@ -1,4 +1,4 @@
-"""Provenance events, cryptographic signing and blockchain commitment."""
+"""Provenance events, cryptographic signing, audit logging, and Proof of Creator support."""
 from __future__ import annotations
 
 import uuid
@@ -8,6 +8,7 @@ from typing import List
 from models.provenance import CreateEventRequest, Lineage, LineageStep, ProvenanceAction, ProvenanceEvent
 from services import blockchain, signature
 from services.artifact_registry import get_artifact
+from services.creator_auth import validate_authorization_token
 from services.errors import DuplicateError, NotFoundError, ValidationFailure
 from services.hashing import canonical_json_hash
 from services.model_registry import get_model
@@ -28,11 +29,25 @@ def add_event(req: CreateEventRequest) -> ProvenanceEvent:
     if existing:
         raise DuplicateError(f"{child.artifact_id} already has a creating event ({existing[0].event_id}).", existing[0].event_id)
 
+    creator_verified = False
+    biometric_commitment = None
+    if req.creator_auth_token:
+        token_info = validate_authorization_token(req.creator_auth_token)
+        if token_info:
+            creator_verified = True
+            biometric_commitment = token_info.get("biometric_commitment")
+
     event = ProvenanceEvent(
-        event_id="EVT-" + uuid.uuid4().hex[:8].upper(), parent_artifact_id=req.parent_artifact_id,
-        child_artifact_id=req.child_artifact_id, action=req.action, model_id=req.model_id,
-        application_id=req.application_id, metadata_hash=canonical_json_hash(req.metadata),
+        event_id="EVT-" + uuid.uuid4().hex[:8].upper(),
+        parent_artifact_id=req.parent_artifact_id,
+        child_artifact_id=req.child_artifact_id,
+        action=req.action,
+        model_id=req.model_id,
+        application_id=req.application_id,
+        metadata_hash=canonical_json_hash(req.metadata),
         created_at=datetime.now(timezone.utc),
+        creator_verified=creator_verified,
+        biometric_commitment=biometric_commitment,
     )
 
     signed = signature.sign_event(event)
@@ -40,10 +55,31 @@ def add_event(req: CreateEventRequest) -> ProvenanceEvent:
         event.signature, event.signature_public_key = signed
 
     store.insert_event(event)
+
+    # Audit log
+    store.log_audit(
+        action="PROVENANCE_EVENT_CREATED",
+        actor=req.application_id or req.model_id or "System",
+        resource_id=event.event_id,
+        details={
+            "action": event.action.value,
+            "child_artifact_id": event.child_artifact_id,
+            "parent_artifact_id": event.parent_artifact_id,
+            "creator_verified": creator_verified,
+            "biometric_commitment": biometric_commitment,
+        },
+    )
+
     claim = signature.claim_hash(event)
     chain = blockchain.add_provenance_event(
-        event.event_id, event.parent_artifact_id, event.child_artifact_id, event.model_id,
-        event.application_id, event.action.value, event.metadata_hash, claim,
+        event.event_id,
+        event.parent_artifact_id,
+        event.child_artifact_id,
+        event.model_id,
+        event.application_id,
+        event.action.value,
+        event.metadata_hash,
+        claim,
     )
     if chain.get("committed"):
         store.update_event_evidence(event.event_id, blockchain_tx=chain["tx_hash"])

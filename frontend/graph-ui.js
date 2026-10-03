@@ -16,11 +16,14 @@ function flowNode(node) {
     span.appendChild(el("span", "", node.label + (node.missing ? " (missing)" : "")));
   }
   span.title = node.kind + (node.exact_hash ? " · " + node.exact_hash.slice(0, 16) + "…" : "");
+  span.dataset.nodePayload = JSON.stringify(node);
+  span.tabIndex = 0;
+  span.setAttribute("role", "button");
+  span.setAttribute("aria-label", node.kind + " " + node.label + ", inspect evidence");
   return span;
 }
 
 function renderFlow(container, nodes, edges) {
-  container.replaceChildren();
   if (!nodes || !nodes.length) { container.appendChild(el("p", "empty", "No graph data yet.")); return; }
   const byId = {}; nodes.forEach((n) => { byId[n.id] = n; });
   const flow = el("div", "flow");
@@ -45,7 +48,6 @@ function renderFlow(container, nodes, edges) {
 }
 
 function renderLineageRow(container, lineage) {
-  container.replaceChildren();
   if (!lineage || !lineage.steps || !lineage.steps.length) { container.appendChild(el("p", "empty", "No lineage recorded.")); return; }
   const row = el("div", "lineage");
   lineage.steps.forEach((s, i) => {
@@ -65,7 +67,6 @@ function renderLineageRow(container, lineage) {
 }
 
 function renderChecks(container, checks) {
-  container.replaceChildren();
   const ul = el("ul", "checks");
   (checks || []).forEach((c) => {
     const li = el("li", c.state);
@@ -79,3 +80,6 @@ function renderChecks(container, checks) {
 
 function artifactLink(id) { return link(id, "/artifacts/" + encodeURIComponent(id)); }
 function modelLink(id) { return link(id, "/models/" + encodeURIComponent(id)); }
+
+
+

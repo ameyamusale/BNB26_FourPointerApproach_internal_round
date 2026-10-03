@@ -15,18 +15,27 @@
   <nav class="nav" id="navLinks"></nav>
 
   <section class="hero">
-    <h1>AI content provenance, with evidence.</h1>
-    <p>ModelLedger records which AI model produced an artifact, every transformation it went through, and the cryptographic + blockchain evidence behind each claim — without exposing private prompts or files.</p>
-  </section>
+  <div class="hero-copy"><h1>AI content<br>provenance,<br>with evidence.</h1><p><span class="copy-wide">ModelLedger reconstructs the evidence behind AI content as it moves through models, applications and transformations. Private prompts and files remain private.</span><span class="copy-mobile">ModelLedger reconstructs the evidence<br>behind AI content as it moves through<br>models, applications and transformations.<br>Private prompts and files remain private.</span></p><div class="btnrow"><a class="primary-btn" href="/verify">Verify an artifact <span aria-hidden="true">&#8594;</span></a><a class="ghost-btn" href="#provenanceGraph">Explore lineage</a></div></div>
+  <div class="hero-network" aria-label="Model to artifact provenance path"><div class="network-node" tabindex="0"><b>MODEL</b><small>registered identity</small></div><span class="network-edge"></span><div class="network-node" tabindex="0"><b>ARTIFACT</b><small>integrity fingerprinted</small></div><span class="network-edge"></span><div class="network-node" tabindex="0"><b>TRANSFORMATION</b><small>event signed</small></div><span class="network-edge"></span><div class="network-node" tabindex="0"><b>VERIFICATION</b><small>evidence reconstructed</small></div></div>
+</section>
 
   <section class="stats" id="statGrid">
-    <div class="stat"><div class="num" id="statModels">—</div><div class="lbl">Models</div></div>
-    <div class="stat"><div class="num" id="statArtifacts">—</div><div class="lbl">Artifacts</div></div>
-    <div class="stat"><div class="num" id="statEvents">—</div><div class="lbl">Provenance events</div></div>
-    <div class="stat"><div class="num" id="statSigned">—</div><div class="lbl">Signed events</div></div>
-    <div class="stat"><div class="num" id="statOnchain">—</div><div class="lbl">On-chain records</div></div>
+    <div class="stat"><div class="num" id="statModels">—</div><div class="lbl">Models</div><div class="metric-note">Registered identities</div></div>
+    <div class="stat"><div class="num" id="statArtifacts">—</div><div class="lbl">Artifacts</div><div class="metric-note">Integrity fingerprinted</div></div>
+    <div class="stat"><div class="num" id="statEvents">—</div><div class="lbl">Provenance events</div><div class="metric-note">Lineage recorded</div></div>
+    <div class="stat"><div class="num" id="statCreators">—</div><div class="lbl">Creators enrolled</div></div>
+    <div class="stat"><div class="num" id="statAuditLogs">—</div><div class="lbl">Audit log entries</div></div>
+    <div class="stat"><div class="num" id="statOnchain">—</div><div class="lbl">On-chain commitments</div></div>
   </section>
 
+  <section class="tour-banner command-actions">
+    <div class="tour-header"><h2>Investigate the record</h2><span class="chip ok">Evidence-led workflow</span></div>
+    <div class="tour-steps">
+      <article class="tour-step"><div class="num">01 / VERIFY</div><h3>Check an artifact</h3><p>Compare its fingerprint, registered origin and available evidence.</p><a class="primary-btn btn" href="/verify">Open verification &#8594;</a></article>
+      <article class="tour-step"><div class="num">02 / REGISTER</div><h3>Register a model</h3><p>Create a traceable identity for a model and its creator.</p><a class="ghost-btn btn" href="/models">Open registry &#8594;</a></article>
+      <article class="tour-step"><div class="num">03 / TRACE</div><h3>Follow lineage</h3><p>Inspect the events connecting models, applications and artifacts.</p><a class="ghost-btn btn" href="/artifacts">Browse artifacts &#8594;</a></article>
+    </div>
+  </section>
   <div class="grid2">
     <section class="card">
       <h2>Recent models <a class="link" href="/models">view all →</a></h2>
@@ -38,16 +47,26 @@
     </section>
   </div>
 
-  <section class="card">
-    <h2>Full provenance graph <span class="count" id="graphCount"></span></h2>
-    <p class="hint">Every registered model, artifact and application with its provenance edges. Click any node to open its passport.</p>
-    <div id="fullGraph"></div>
+  <section class="card" id="provenanceGraph">
+    <h2>Provenance network <span class="count" id="graphCount"></span></h2>
+    <p class="hint">Every registered model, artifact and application with its provenance edges. Select a node to inspect its evidence and passport.</p>
+    <div id="fullGraph" class="evidence-network"></div>
   </section>
 
   <footer>Evidence states are never overstated: when blockchain or signing keys are not configured, checks show as <b>not checked</b> instead of passing.</footer>
 </div>
+<dialog id="graphInspector"><button class="ghost-btn inspector-close" type="button" data-close-inspector>Close</button><p class="hint mono">PROVENANCE NODE</p><h2 id="inspectorTitle">Node details</h2><div id="inspectorBody"></div></dialog>
 <script src="/static/common.js"></script>
 <script src="/static/graph-ui.js"></script>
 <script src="/static/dashboard.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

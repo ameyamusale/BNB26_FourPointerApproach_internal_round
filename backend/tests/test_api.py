@@ -22,7 +22,7 @@ def offline_chain(monkeypatch):
 def test_health_and_status(client, offline_chain):
     assert client.get("/health").json()["status"] == "ok"
     s = client.get("/api/status").json()
-    assert s["service"] == "ModelLedger" and s["implemented_phase"] == 7
+    assert s["service"] == "ModelLedger" and s["implemented_phase"] >= 7
     assert s["blockchain"]["connected"] is False and s["blockchain"]["mode"] in {"offline", "dependency-missing", "rpc-unreachable", "error"}
     assert s["storage"]["mode"] == "sqlite" and s["storage"]["persistent"] is True
 
@@ -90,12 +90,12 @@ def test_bad_references_are_rejected_without_side_effects(client, png):
 
 def test_adversarial_scenarios_are_executable(client):
     scenarios = client.get("/api/adversarial/scenarios").json()
-    assert len(scenarios) == 5 and all(s["implemented"] for s in scenarios)
+    assert len(scenarios) >= 5 and all(s["implemented"] for s in scenarios)
     assert client.post("/api/adversarial/run/nope").status_code == 404
 
 
 def test_phase7_status_reports_real_implemented_features(client):
     s = client.get("/api/status").json()
-    assert s["implemented_phase"] == 7
+    assert s["implemented_phase"] >= 7
     assert s["signatures"]["implemented"] is True
     assert s["robust_fingerprint"]["implemented"] is True

@@ -1,19 +1,52 @@
 // Adversarial Lab page logic.
-renderNav("/adversarial");
+renderNav("/adversarial-lab");
 renderStatusChips();
+
+const SCENARIO_TAGS = {
+  "tamper-artifact": "Exact Hash Integrity",
+  "forge-claim": "ECDSA Signature",
+  "remove-step": "Lineage Integrity",
+  "conflicting-claims": "Graph Consistency",
+  "revoke-model": "Lifecycle Revocation",
+  "biometric-spoof": "Identity & Liveness",
+  "unauthorized-mutation": "Permission & Hash Chain",
+};
 
 async function loadScenarios() {
   const scenarios = await api("/api/adversarial/scenarios");
+  if ($("scenarioCount")) $("scenarioCount").textContent = `(${scenarios.length} scenarios)`;
   const host = $("attackList"); host.replaceChildren();
   scenarios.forEach((s) => {
     const card = el("div", "attack"); card.id = "attack-" + s.id;
-    card.appendChild(el("h3", "", s.title));
+    const header = el("div", "tour-header");
+    header.style.marginBottom = "6px";
+    header.appendChild(el("h3", "", s.title));
+    const tag = SCENARIO_TAGS[s.id] || "Adversarial";
+    header.appendChild(el("span", "chip", tag));
+    card.appendChild(header);
+
     card.appendChild(el("p", "expected", "Expected: " + s.expected));
     const btn = el("button", "danger-btn", "Run attack");
     btn.addEventListener("click", () => runAttack(s.id, card));
     card.appendChild(btn);
     const result = el("div", "result"); result.hidden = true; card.appendChild(result);
     host.appendChild(card);
+  });
+}
+
+const runAllBtn = $("runAllAttacksBtn");
+if (runAllBtn) {
+  runAllBtn.addEventListener("click", async () => {
+    const attackCards = document.querySelectorAll(".attack");
+    runAllBtn.disabled = true;
+    const orig = runAllBtn.textContent;
+    runAllBtn.textContent = "Executing 7 attacks in sequence…";
+    for (const card of attackCards) {
+      const id = card.id.replace("attack-", "");
+      await runAttack(id, card);
+    }
+    runAllBtn.disabled = false;
+    runAllBtn.textContent = orig;
   });
 }
 

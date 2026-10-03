@@ -1,9 +1,4 @@
-"""Trust Engine: maps structured evidence to a trust state.
-
-The rules are the final ModelLedger rules already; they simply cannot reach
-TRUSTED yet because signature and blockchain checks are not implemented
-(evidence stays None = "not checked").
-"""
+"""Trust Engine: maps structured evidence to a trust state (Phases 4, 7, 8)."""
 from __future__ import annotations
 
 from typing import List
@@ -39,6 +34,10 @@ def evaluate(evidence: VerificationEvidence, conflicts: List[str] | None = None)
         flags.append("REVOKED")
         reasons.append("The originating model or claim has been revoked; the history is kept but no longer trusted.")
 
+    if evidence.creator_verified is True:
+        flags.append("PROOF_OF_CREATOR_VERIFIED")
+        reasons.append("Claimed origin is authorized by biometric Proof of Creator.")
+
     required = {
         "model is registered": evidence.model_registered,
         "signature is valid": evidence.signature_valid,
@@ -48,9 +47,12 @@ def evaluate(evidence: VerificationEvidence, conflicts: List[str] | None = None)
     missing = [name for name, ok in required.items() if ok is not True]
 
     if not missing:
+        trusted_reasons = ["All required evidence is present, consistent and verified."]
+        if "PROOF_OF_CREATOR_VERIFIED" in flags:
+            trusted_reasons.append("Biometric Proof of Creator confirmed and bound to cryptographic provenance.")
         return TrustDecision(
             status=TrustStatus.TRUSTED,
-            reasons=["All required evidence is present, consistent and verified."],
+            reasons=trusted_reasons,
             flags=flags,
         )
 

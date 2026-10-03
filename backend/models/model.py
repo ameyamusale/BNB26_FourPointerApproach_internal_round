@@ -14,6 +14,8 @@ class ModelStatus(str, Enum):
 
 
 class RegisterModelRequest(BaseModel):
+    model_config = {"protected_namespaces": ()}
+
     name: str = Field(..., min_length=1, max_length=80, examples=["VisionGen-X"])
     version: str = Field(..., min_length=1, max_length=32, examples=["2.1.0"])
     model_type: str = Field("image-generator", min_length=1, max_length=40)
@@ -22,9 +24,13 @@ class RegisterModelRequest(BaseModel):
     # Optional: SHA-256 of the model weights, computed client-side so the binary never
     # leaves the creator's machine. If omitted, the server commits to the metadata only.
     model_hash: Optional[str] = Field(None, pattern=r"^[0-9a-fA-F]{64}$")
+    creator_auth_token: Optional[str] = Field(None, description="Proof of Creator biometric authorization token")
+    private_prompt_commitment: Optional[str] = Field(None, description="SHA-256 hash commitment of private system prompt/recipe")
 
 
 class ModelRecord(BaseModel):
+    model_config = {"protected_namespaces": ()}
+
     model_id: str
     name: str
     version: str
@@ -37,3 +43,6 @@ class ModelRecord(BaseModel):
     status: ModelStatus = ModelStatus.ACTIVE
     created_at: datetime
     blockchain_tx: Optional[str] = None
+    creator_verified: bool = False
+    biometric_commitment: Optional[str] = None
+    private_prompt_commitment: Optional[str] = None

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — Proof of Creator</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <a class="brand" href="/dashboard">Model<span>Ledger</span></a>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+  <nav class="nav" id="navLinks"></nav>
+
+  <section class="hero">
+    <h1>Proof of Creator</h1>
+    <p>Biometric-backed identity authorization for AI-generated artifacts. Face detection and anti-spoof liveness authorize cryptographic signing without ever publishing raw biometric data or putting facial vectors on-chain.</p>
+  </section>
+
+  <!-- Live Biometric Camera & Verification Studio -->
+  <div class="grid2">
+    <!-- Camera & Capture Box -->
+    <section class="card">
+      <h2>Camera & Capture</h2>
+      <div class="camera-container" style="position:relative; background:#0f172a; border-radius:8px; overflow:hidden; min-height:280px; display:flex; align-items:center; justify-content:center;">
+        <video id="webcam" autoplay playsinline muted style="width:100%; height:auto; max-height:300px; object-fit:cover; display:none;"></video>
+        <canvas id="overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+        <div id="cameraPlaceholder" style="text-align:center; padding:30px; color:#94a3b8;">
+          <p style="margin-bottom:12px; font-size:1.1rem;">📷 Camera Inactive</p>
+          <p class="hint">Click "Start Camera" or select an image file below.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <button class="primary-btn" id="btnStartCam" type="button">Start Camera</button>
+        <button class="primary-btn" id="btnSnapPhoto" type="button" disabled>Capture Frame</button>
+        <button class="ghost-btn" id="btnStopCam" type="button" disabled>Stop Camera</button>
+      </div>
+
+      <div style="margin-top:16px;">
+        <label>Or select photo file:
+          <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.webp" />
+        </label>
+      </div>
+
+      <div id="capturePreviewContainer" style="margin-top:12px; display:none;">
+        <p class="hint">Active Capture Preview:</p>
+        <img id="capturePreview" style="max-height:120px; border-radius:6px; border:2px solid #38bdf8;" alt="Capture Preview" />
+      </div>
+    </section>
+
+    <!-- Real-time Liveness & Identity Verification -->
+    <section class="card">
+      <h2>Liveness & Authorization</h2>
+      <form id="verifyForm">
+        <label>Select Enrolled Creator:
+          <select id="creatorSelect" required>
+            <option value="">— Loading enrolled creators… —</option>
+          </select>
+        </label>
+
+        <ol class="auth-steps" id="authSteps" aria-label="Creator authorization stages">
+          <li data-step="01" data-state="waiting" id="authImageStep">IMAGE CAPTURED</li><li data-step="02" data-state="waiting" id="authFaceStep">FACE DETECTED</li><li data-step="03" data-state="waiting" id="authLiveStep">LIVENESS VERIFIED</li><li data-step="04" data-state="waiting" id="authIdentityStep">IDENTITY MATCHED</li><li data-step="05" data-state="waiting" id="authSignStep">AUTHORIZATION TOKEN ISSUED</li>
+        </ol>        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="primary-btn" type="submit" id="btnAuthorize">Verify & Authorize</button>
+          <button class="ghost-btn" type="button" id="btnCheckLiveness">Test Liveness Only</button>
+        </div>
+        <p class="msg" id="verifyMsg"></p>
+      </form>
+
+      <!-- Diagnostic Results Panel -->
+      <div id="pocResult" style="margin-top:16px; display:none;">
+        <h3>Authorization Receipt</h3>
+        <div id="pocResultBody"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Creator Enrollment Card -->
+  <section class="card">
+    <h2>Enroll New Creator Identity</h2>
+    <p class="hint">Enrolls a new creator profile. The face image is processed into a normalized feature template and hashed into a privacy-preserving SHA-256 commitment (<code>0x...</code>). Raw images are never placed on-chain.</p>
+    
+    <form id="enrollForm">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+        <label>Creator Name:
+          <input type="text" id="enrollName" placeholder="e.g. Elena Rostova / Studio Nova" required />
+        </label>
+        <label>Creator ID (optional):
+          <input type="text" id="enrollId" placeholder="e.g. CRT-NOVA-01" />
+        </label>
+        <label>Ethereum Wallet Address (optional):
+          <input type="text" id="enrollWallet" placeholder="0x..." />
+        </label>
+      </div>
+      <p class="hint" style="margin-top:8px;">Use the active captured frame or file selected above as the facial biometric template.</p>
+      <button class="primary-btn" type="submit" style="margin-top:10px;">Enroll Creator Biometrics</button>
+      <p class="msg" id="enrollMsg"></p>
+    </form>
+  </section>
+
+  <!-- Enrolled Creators Table -->
+  <section class="card">
+    <h2>Enrolled Creator Directory <span class="count" id="identitiesCount"></span></h2>
+    <div class="scroll"><table id="creatorTable"></table></div>
+  </section>
+
+  <footer>
+    Proof of Creator: Biometrics authorize claims off-chain; cryptographic ECDSA keys produce the signatures; blockchain guarantees tamper-evidence. Zero raw biometrics on-chain.
+  </footer>
+</div>
+
+<script src="/static/common.js"></script>
+<script src="/static/creator.js"></script>
+</body>
+</html>
+
+

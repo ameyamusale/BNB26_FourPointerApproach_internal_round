@@ -20,6 +20,10 @@
   </section>
 
   <section class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+      <h2>Adversarial Attack Suite <span class="count" id="scenarioCount"></span></h2>
+      <button class="danger-btn" id="runAllAttacksBtn" style="font-size:0.85rem; padding:8px 14px;">⚡ Run All 7 Attacks</button>
+    </div>
     <p class="hint">Attacks mutate lab state (they create or corrupt dedicated lab records). The evidence panel under each attack explains exactly which check failed and why.</p>
     <div id="attackList"></div>
   </section>

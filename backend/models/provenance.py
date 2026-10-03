@@ -20,6 +20,8 @@ class ProvenanceAction(str, Enum):
 
 
 class CreateEventRequest(BaseModel):
+    model_config = {"protected_namespaces": ()}
+
     parent_artifact_id: Optional[str] = None  # None only for GENERATED
     child_artifact_id: str
     action: ProvenanceAction
@@ -27,9 +29,12 @@ class CreateEventRequest(BaseModel):
     application_id: Optional[str] = Field(None, max_length=80)
     # Private details (prompts, parameters...) go here. Only their hash is stored.
     metadata: Dict[str, Any] = Field(default_factory=dict)
+    creator_auth_token: Optional[str] = Field(None, description="Proof of Creator authorization token")
 
 
 class ProvenanceEvent(BaseModel):
+    model_config = {"protected_namespaces": ()}
+
     event_id: str
     parent_artifact_id: Optional[str] = None
     child_artifact_id: str
@@ -41,6 +46,8 @@ class ProvenanceEvent(BaseModel):
     blockchain_tx: Optional[str] = None   # Phase 3
     signature_public_key: Optional[str] = None  # Phase 4 verification key
     created_at: datetime
+    creator_verified: bool = False
+    biometric_commitment: Optional[str] = None
 
 
 class LineageStep(BaseModel):

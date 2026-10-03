@@ -17,3 +17,7 @@ class DuplicateError(ModelLedgerError):
 
 class ValidationFailure(ModelLedgerError):
     pass
+
+
+class ValidationError(ValidationFailure):
+    pass

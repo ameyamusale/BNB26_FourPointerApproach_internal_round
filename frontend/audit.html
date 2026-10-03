@@ -20,6 +20,16 @@
   </section>
 
   <section class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+      <h2>Tamper-Evident System Audit Hash Chain <span class="count" id="auditLogCount"></span></h2>
+      <button class="primary-btn" id="verifyChainBtn" style="font-size:0.85rem; padding:8px 14px;">⛓ Verify Hash Chain Integrity</button>
+    </div>
+    <p class="hint">Every critical administrative and registration action is recorded in a SHA-256 chained ledger (entry_hash = H(prev_hash + data)). Any record tampering immediately breaks the hash chain.</p>
+    <div id="chainIntegrityResult" style="margin: 10px 0;"></div>
+    <div class="scroll"><table id="auditLogTable"></table></div>
+  </section>
+
+  <section class="card">
     <h2>Provenance events <span class="count" id="eventCount"></span></h2>
     <div class="scroll"><table id="eventTable"></table></div>
   </section>

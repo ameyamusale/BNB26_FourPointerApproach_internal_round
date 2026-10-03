@@ -21,7 +21,7 @@
 
   <section class="card">
     <form id="verifyForm">
-      <label>Image file <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
+      <label class="upload-zone" id="artifactDropZone">Drop an artifact here or choose a file<input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
       <button class="primary-btn" type="submit">Verify</button>
       <p class="msg" id="verifyMsg"></p>
     </form>
@@ -32,9 +32,28 @@
     <h2>Verification result</h2>
     <div id="resultBody"></div>
   </section>
+
+  <section class="card">
+    <h2>Privacy-Preserving Zero Prompt Verification</h2>
+    <p class="hint">ModelLedger never reveals private prompts on-chain. Verify whether a claimed prompt matches the SHA-256 commitment registered with the model/provenance claim without leaking secret prompts.</p>
+    <form id="promptCommitmentForm">
+      <label>SHA-256 Prompt Commitment Hash
+        <input id="expectedCommitmentInput" name="prompt_commitment" required placeholder="64 hex characters (e.g. e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855)" />
+      </label>
+      <label>Candidate Prompt Text <small>(Evaluated strictly off-chain)</small>
+        <textarea id="candidatePromptInput" name="prompt_text" rows="2" style="width:100%; border-radius:8px; border:1px solid var(--line); background:var(--panel2); color:var(--text); font:inherit; padding:8px;" required placeholder="Enter candidate prompt text to verify against hash commitment"></textarea>
+      </label>
+      <div class="btnrow" style="margin-top: 8px;">
+        <button class="secondary-btn" type="submit">Verify Prompt Commitment</button>
+        <button type="button" class="ghost-btn" id="demoPromptBtn">Fill Sample Prompt</button>
+      </div>
+      <p class="msg" id="promptCommitmentMsg"></p>
+    </form>
+  </section>
 </div>
 <script src="/static/common.js"></script>
 <script src="/static/graph-ui.js"></script>
 <script src="/static/verify.js"></script>
 </body>
 </html>
+

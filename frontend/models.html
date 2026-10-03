@@ -25,10 +25,16 @@
       <form id="modelForm">
         <label>Name <input name="name" required maxlength="80" placeholder="VisionGen-X" /></label>
         <label>Version <input name="version" required maxlength="32" placeholder="2.1.0" /></label>
-        <label>Creator <input name="creator_name" required maxlength="80" placeholder="Team Alpha" /></label>
+        <label>Creator <input id="creatorNameInput" name="creator_name" required maxlength="80" placeholder="Team Alpha" /></label>
         <label>Type <input name="model_type" value="image-generator" maxlength="40" /></label>
         <label>Weights SHA-256 <small>(optional, computed on your machine)</small>
           <input name="model_hash" pattern="[0-9a-fA-F]{64}" placeholder="64 hex characters" /></label>
+        <label>Proof of Creator Token <small>(optional, from facial biometric authorization)</small>
+          <input id="creatorTokenInput" name="creator_auth_token" placeholder="Paste HMAC token or click autofill" />
+        </label>
+        <div class="btnrow" style="margin-bottom: 12px;">
+          <button type="button" class="ghost-btn" id="autofillTokenBtn">⚡ Autofill from Biometric Session</button>
+        </div>
         <button class="primary-btn" type="submit">Register model</button>
         <p class="msg" id="modelMsg"></p>
       </form>

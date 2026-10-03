@@ -25,6 +25,7 @@ class VerificationEvidence(BaseModel):
     None is deliberately distinct from True so that an unavailable check
     (e.g. blockchain offline) can never be shown as a success.
     """
+    model_config = {"protected_namespaces": ()}
 
     artifact_match: Optional[bool] = None
     model_registered: Optional[bool] = None
@@ -33,6 +34,8 @@ class VerificationEvidence(BaseModel):
     transformation_valid: Optional[bool] = None
     blockchain_record: Optional[bool] = None
     revoked: Optional[bool] = None
+    creator_verified: Optional[bool] = None
+    creator_biometric_commitment: Optional[str] = None
 
 
 class EvidenceCheck(BaseModel):
@@ -57,4 +60,5 @@ class VerificationReport(BaseModel):
     checks: List[EvidenceCheck]
     decision: TrustDecision
     blockchain: Dict[str, Any]
+    creator_identity: Optional[Dict[str, Any]] = None
     verified_at: datetime

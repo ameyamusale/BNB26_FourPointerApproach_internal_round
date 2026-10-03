@@ -21,10 +21,15 @@ async function loadPassport() {
     const m = p.model;
     body.appendChild(badge(m.status));
     const kv = el("div", "kv");
-    [["Model ID", m.model_id], ["Name", `${m.name} v${m.version}`], ["Type", m.model_type],
-     ["Creator", `${m.creator_name} (${m.creator_id})`], ["Model hash", m.model_hash],
-     ["Metadata hash", m.metadata_hash], ["Registered", fmt(m.created_at)],
-     ["On-chain tx", p.blockchain.tx || "— (not configured)"]].forEach(([k, v]) => {
+    const rows = [
+      ["Model ID", m.model_id], ["Name", `${m.name} v${m.version}`], ["Type", m.model_type],
+      ["Creator", `${m.creator_name} (${m.creator_id})`],
+      ["Proof of Creator", m.creator_verified ? `✔ Biometrically Authorized (Commitment: ${m.biometric_commitment ? short(m.biometric_commitment) : "recorded"})` : "— Self-Asserted"],
+      ["Model hash", m.model_hash],
+      ["Metadata hash", m.metadata_hash], ["Registered", fmt(m.created_at)],
+      ["On-chain tx", p.blockchain.tx || "— (not configured)"],
+    ];
+    rows.forEach(([k, v]) => {
       const kd = el("div", "k", k), vd = el("div", "mono", String(v));
       vd.style.wordBreak = "break-all";
       kv.appendChild(kd); kv.appendChild(vd);
@@ -43,12 +48,16 @@ async function loadPassport() {
   } else {
     const a = p.artifact;
     body.appendChild(badge(p.trust.status));
+    const artRows = [
+      ["Artifact ID", a.artifact_id], ["Type", a.artifact_type], ["SHA-256", a.exact_hash],
+      ["Robust fingerprint", a.robust_fingerprint || "—"], ["Size", a.size_bytes + " bytes"],
+      ["Claimed origin", p.model ? `${p.model.name} v${p.model.version} (${p.model.model_id})` : a.model_id || "—"],
+      ["Creator authorization", p.model && p.model.creator_verified ? `✔ Biometrically Authorized (${short(p.model.biometric_commitment)})` : "— Self-Asserted"],
+      ["Registered", fmt(a.created_at)], ["Transformations", String(p.transformation_count)],
+      ["On-chain tx", p.blockchain.artifact_tx || "— (not configured)"],
+    ];
     const kv = el("div", "kv");
-    [["Artifact ID", a.artifact_id], ["Type", a.artifact_type], ["SHA-256", a.exact_hash],
-     ["Robust fingerprint", a.robust_fingerprint || "—"], ["Size", a.size_bytes + " bytes"],
-     ["Claimed origin", p.model ? `${p.model.name} v${p.model.version} (${p.model.model_id})` : a.model_id || "—"],
-     ["Registered", fmt(a.created_at)], ["Transformations", String(p.transformation_count)],
-     ["On-chain tx", p.blockchain.artifact_tx || "— (not configured)"]].forEach(([k, v]) => {
+    artRows.forEach(([k, v]) => {
       const kd = el("div", "k", k), vd = el("div", "mono", String(v));
       vd.style.wordBreak = "break-all";
       kv.appendChild(kd); kv.appendChild(vd);

@@ -18,6 +18,8 @@ class ArtifactStatus(str, Enum):
 
 
 class ArtifactRecord(BaseModel):
+    model_config = {"protected_namespaces": ()}
+
     artifact_id: str
     artifact_type: ArtifactType = ArtifactType.IMAGE
     exact_hash: str                      # SHA-256 of the exact bytes

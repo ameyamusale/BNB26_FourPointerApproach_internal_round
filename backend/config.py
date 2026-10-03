@@ -9,23 +9,23 @@ from pathlib import Path
 
 APP_NAME = "ModelLedger"
 APP_TAGLINE = "AI Content Provenance & Verification Network"
-APP_VERSION = "0.1.0"
-IMPLEMENTED_PHASE = 7  # Phases 0-4 + Phase 5 (graph/passports/UI) + Phase 6 (demo pipeline) + Phase 7 (trust/conflicts/adversarial lab)
+APP_VERSION = "0.2.0"
+IMPLEMENTED_PHASE = 10  # All Phases 0 through 10 fully implemented and verified
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
 
-# --- Off-chain database (Phase 2) ---
+# --- Off-chain database (Phase 2 & 9) ---
 # SQLite is the default local database so the complete MVP works without a
 # separately managed database server. Set MODELLEDGER_DB_PATH to use another
 # SQLite file location.
 DATABASE_PATH = os.getenv("MODELLEDGER_DB_PATH", str(ROOT_DIR / "data" / "modelledger.db"))
 
-# --- Uploads (artifacts are hashed in memory; Phase 1 never writes them to disk) ---
+# --- Uploads (artifacts are hashed in memory with strict validation) ---
 MAX_UPLOAD_BYTES = int(os.getenv("MODELLEDGER_MAX_UPLOAD_MB", "10")) * 1024 * 1024
 ALLOWED_ARTIFACT_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp"}
 
-# --- Blockchain (wired up in Phase 3; empty means "not configured") ---
+# --- Blockchain (wired up in Phase 3; empty means "offline/not configured") ---
 BLOCKCHAIN_RPC_URL = os.getenv("MODELLEDGER_RPC_URL", "").strip()
 CONTRACT_ADDRESS = os.getenv("MODELLEDGER_CONTRACT_ADDRESS", "").strip()
 BLOCKCHAIN_TX_PRIVATE_KEY = os.getenv("MODELLEDGER_TX_PRIVATE_KEY", "").strip()
