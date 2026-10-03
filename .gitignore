@@ -1,0 +1,113 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+veda/
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.pyc
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Uploaded Documents
+# =========================
+uploads/
+generated_qr/
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# =========================
+# OCR / ML generated files
+# =========================
+/models/
+checkpoints/
+runs/
+outputs/
+*.pkl
+*.pickle
+*.pt
+*.pth
+*.onnx
+
+# =========================
+# FastAPI / Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# Node / React
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build files
+dist/
+build/
+.next/
+.cache/
+
+# =========================
+# IDE / Editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Testing / Coverage
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+.coverage.*
+
+# =========================
+# Database
+# =========================
+*.sqlite
+*.sqlite3
+
+# =========================
+# Blockchain
+# =========================
+artifacts/
+cache/
+typechain-types/
+
+# =========================
+# Local runtime data
+backend/data/
+
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.bak

@@ -1,0 +1,15 @@
+{
+  "name": "modelledger",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ModelLedger — AI content provenance & verification network (convenience scripts)",
+  "scripts": {
+    "build": "node -c frontend/app.js",
+    "test": "npm --prefix blockchain test",
+    "chain:install": "npm --prefix blockchain install",
+    "chain:test": "npm --prefix blockchain test",
+    "chain:node": "npm --prefix blockchain run node",
+    "chain:deploy": "npm --prefix blockchain run deploy:local"
+  },
+  "license": "ISC"
+}

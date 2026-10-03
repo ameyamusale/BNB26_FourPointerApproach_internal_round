@@ -1,0 +1,2 @@
+# Optional blockchain integration for Phase 3.
+web3>=6.15,<8

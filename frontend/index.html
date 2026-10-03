@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModelLedger — AI Content Provenance</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <div class="brand">Model<span>Ledger</span></div>
+    <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  </header>
+
+  <section class="hero">
+    <h1>Inspect the evidence behind an AI artifact.</h1>
+    <p>Register models, register the artifacts they produce, link them with provenance events, and verify any file against the registry. Phase 4 build &mdash; exact hashes, robust fingerprints, signed provenance and blockchain commitments.</p>
+  </section>
+
+  <section class="grid">
+    <div class="card">
+      <h2>1 · Register model</h2>
+      <form id="modelForm">
+        <label>Name <input name="name" required maxlength="80" placeholder="VisionGen-X" /></label>
+        <label>Version <input name="version" required maxlength="32" placeholder="2.1.0" /></label>
+        <label>Creator <input name="creator_name" required maxlength="80" placeholder="Team Alpha" /></label>
+        <label>Type <input name="model_type" value="image-generator" maxlength="40" /></label>
+        <label>Weights SHA-256 <small>(optional, computed on your machine)</small>
+          <input name="model_hash" pattern="[0-9a-fA-F]{64}" placeholder="64 hex characters" /></label>
+        <button class="primary-btn" type="submit">Register model</button>
+        <p class="msg" id="modelMsg"></p>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>2 · Register artifact</h2>
+      <form id="artifactForm">
+        <label>Image file <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
+        <label>Producing model <select name="model_id" id="modelSelect"><option value="">— none —</option></select></label>
+        <label>Parent artifact <small>(leave empty for a freshly generated image)</small>
+          <select name="parent_artifact_id" id="parentSelect"><option value="">— none (GENERATED) —</option></select></label>
+        <label>Action <small>(required with a parent)</small>
+          <select name="action" id="actionSelect">
+            <option value="">—</option><option>UPSCALED</option><option>EDITED</option><option>RESIZED</option>
+            <option>CROPPED</option><option>FILTERED</option><option>RE_ENCODED</option><option>PUBLISHED</option>
+          </select></label>
+        <button class="primary-btn" type="submit">Register artifact</button>
+        <p class="msg" id="artifactMsg"></p>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>3 · Verify a file</h2>
+      <form id="verifyForm">
+        <label>Image file <input type="file" name="file" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp" required /></label>
+        <button class="secondary-btn" type="submit">Verify</button>
+        <p class="msg" id="verifyMsg"></p>
+      </form>
+      <p class="hint">Files are hashed in memory. They are not stored.</p>
+    </div>
+  </section>
+
+  <section class="card" id="resultCard" hidden>
+    <h2>Verification result</h2>
+    <div id="resultBody"></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card"><h2>Models <span class="count" id="modelCount"></span></h2><div class="scroll"><table id="modelTable"></table></div></div>
+    <div class="card"><h2>Artifacts <span class="count" id="artifactCount"></span></h2><div class="scroll"><table id="artifactTable"></table></div></div>
+  </section>
+
+  <section class="card">
+    <h2>Provenance events <span class="count" id="eventCount"></span></h2>
+    <div class="scroll"><table id="eventTable"></table></div>
+  </section>
+
+  <footer>Artifacts are hashed in memory and their metadata is persisted in SQLite. When blockchain and signing keys are configured, ModelLedger commits and verifies real on-chain and cryptographic evidence. Offline checks remain explicitly <b>not checked</b>.</footer>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>
